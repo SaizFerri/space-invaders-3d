@@ -4,7 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Laser
+  - Player2
+  - Laser1
+  - Laser2
+  - Player1Gate
+  - Player2Gate
+  - Player1Enemy
+  - Player2Enemy
   layers:
   - Default
   - TransparentFX
