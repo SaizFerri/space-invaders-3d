@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     private string[] _enemyTags = new string[2] {"Player1Enemy", "Player2Enemy"};
 
     [SerializeField]
-    private float _speed = 40;
+    private float _speed = 50;
 
     void Start()
     {

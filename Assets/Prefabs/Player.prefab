@@ -399,8 +399,9 @@ MonoBehaviour:
   _enemy2Prefab: {fileID: 4012840175669405067, guid: 4ca61f65cd59b544f9becd7d4ebdc0df,
     type: 3}
   playerCamera: {fileID: 19}
-  _speed: 30
+  _speed: 20
   _lifes: 5
+  score: 0
 --- !u!54 &74
 Rigidbody:
   m_ObjectHideFlags: 0
