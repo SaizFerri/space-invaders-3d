@@ -14,6 +14,9 @@ public class UIManager : NetworkBehaviour
     private string _ipAddress = "";
 
     [SerializeField]
+    private Text _playerConnectedText;
+
+    [SerializeField]
     private GameObject _pauseMenu;
 
     void Start()
@@ -35,5 +38,10 @@ public class UIManager : NetworkBehaviour
     public string GetIPAddressValue()
     {
         return _ipAddress;
+    }
+
+    public void SetPlayerConnectedText(string text)
+    {
+        _playerConnectedText.text = text;
     }
 }

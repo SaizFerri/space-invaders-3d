@@ -29,8 +29,9 @@ public class GameManager : NetworkManager
 
     public void StartHost()
     {
+        base.networkAddress = _uiManager.GetIPAddressValue();
         base.StartHost();
-        _uiManager.SetMenuStatus(false);
+        //_uiManager.SetMenuStatus(false);
     }
 
     public void ConnectClient()
@@ -54,8 +55,8 @@ public class GameManager : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, _player, playerControllerId);
     }
 
-    private void OnConnectedToServer()
+    private void OnPlayerConnected(NetworkIdentity player)
     {
-        Debug.Log(_player);
+        _uiManager.SetPlayerConnectedText(player.tag);
     }
 }
