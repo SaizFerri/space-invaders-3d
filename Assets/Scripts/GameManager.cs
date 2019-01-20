@@ -35,6 +35,7 @@ public class GameManager : NetworkManager
 
     public void ConnectClient()
     {
+        base.networkAddress = _uiManager.GetIPAddressValue();
         base.StartClient();
         _uiManager.SetMenuStatus(false);
     }
