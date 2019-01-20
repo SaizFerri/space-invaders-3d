@@ -626,7 +626,7 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 2a2d9dca38c717249bd83981aae2e13c, type: 3}
     m_FontSize: 20
     m_FontStyle: 0
-    m_BestFit: 1
+    m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 130
     m_Alignment: 4
@@ -922,7 +922,7 @@ GameObject:
   - component: {fileID: 344264649}
   - component: {fileID: 344264648}
   m_Layer: 5
-  m_Name: PlayerConnectedText
+  m_Name: LobbyInfoText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -937,15 +937,15 @@ RectTransform:
   m_GameObject: {fileID: 344264646}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.13, y: 1.13, z: 1.13}
   m_Children: []
   m_Father: {fileID: 478584048}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -211, y: -315}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 5.9693, y: -434}
+  m_SizeDelta: {x: 364.66, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &344264648
 MonoBehaviour:
@@ -960,7 +960,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -974,11 +974,11 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 100
-    m_Alignment: 0
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
 --- !u!222 &344264649
@@ -1614,7 +1614,7 @@ MonoBehaviour:
     i13: 0
     i14: 0
     i15: 0
-  m_ServerOnly: 1
+  m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &615663501
 MonoBehaviour:
@@ -1720,8 +1720,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 79, y: -236.6}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 15.7, y: -236.6}
+  m_SizeDelta: {x: 36.9, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &631285042
 MonoBehaviour:
@@ -2200,7 +2200,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1199240356}
-        m_MethodName: StartHost
+        m_MethodName: ConnectHost
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2688,10 +2688,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameManager: {fileID: 1199240356}
   _menu: {fileID: 134150702}
+  _lobbyPanel: {fileID: 478584047}
   _instructionsPanel: {fileID: 803848868}
   _addressInput: {fileID: 223202250}
-  _playerConnectedText: {fileID: 344264648}
-  _pauseMenu: {fileID: 0}
+  _lobbyInfoText: {fileID: 344264648}
 --- !u!4 &1115416197
 Transform:
   m_ObjectHideFlags: 0
@@ -2731,7 +2731,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1199240352}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 227461547, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
@@ -2781,16 +2781,16 @@ MonoBehaviour:
   m_OfflineScene: 
   m_OnlineScene: Game
   m_SpawnPrefabs:
-  - {fileID: 31, guid: 518fd283cee0f70429c579b1b3256702, type: 3}
+  - {fileID: 36, guid: 518fd283cee0f70429c579b1b3256702, type: 3}
   - {fileID: 2314338084417419569, guid: d89f24e7d980d0346815c9d84dec9946, type: 3}
   - {fileID: 3232322871138801128, guid: b44d8638df0c66e4ea54c7d7ce93dba6, type: 3}
   - {fileID: 1086116063442159611, guid: 81fe25875e669144ca2385ed652296d0, type: 3}
   - {fileID: 1086116063442159611, guid: 765308d3a0572774fbabc3031e0c5b20, type: 3}
-  - {fileID: 47, guid: 0d65089c59740cb40bd6d2b543386e34, type: 3}
+  - {fileID: 38, guid: 0d65089c59740cb40bd6d2b543386e34, type: 3}
   - {fileID: 2225135348515789858, guid: 39f85ab7305d6c84f99541cd001aae19, type: 3}
   - {fileID: 4012840175669405067, guid: 4ca61f65cd59b544f9becd7d4ebdc0df, type: 3}
   m_CustomConfig: 1
-  m_MaxConnections: 2
+  m_MaxConnections: 1
   m_ConnectionConfig:
     m_PacketSize: 1440
     m_FragmentSize: 500
@@ -2848,8 +2848,8 @@ MonoBehaviour:
   _uiManager: {fileID: 1115416196}
   _spawnPointPlayer1: {fileID: 440203031}
   _spawnPointPlayer2: {fileID: 172566186}
-  _player1Prefab: {fileID: 31, guid: 518fd283cee0f70429c579b1b3256702, type: 3}
-  _player2Prefab: {fileID: 47, guid: 0d65089c59740cb40bd6d2b543386e34, type: 3}
+  _player1Prefab: {fileID: 36, guid: 518fd283cee0f70429c579b1b3256702, type: 3}
+  _player2Prefab: {fileID: 38, guid: 0d65089c59740cb40bd6d2b543386e34, type: 3}
 --- !u!1 &1307876208
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,7 +2916,7 @@ MonoBehaviour:
     i13: 0
     i14: 0
     i15: 0
-  m_ServerOnly: 1
+  m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &1307876211
 MonoBehaviour:
@@ -3230,7 +3230,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 9, y: -50}
+  m_AnchoredPosition: {x: -5, y: -50}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1666745225

@@ -13,6 +13,9 @@ public class UIManager : NetworkBehaviour
     private GameObject _menu;
 
     [SerializeField]
+    private GameObject _lobbyPanel;
+
+    [SerializeField]
     private GameObject _instructionsPanel;
 
     [SerializeField]
@@ -20,10 +23,7 @@ public class UIManager : NetworkBehaviour
     private string _ipAddress = "";
 
     [SerializeField]
-    private Text _playerConnectedText;
-
-    [SerializeField]
-    private GameObject _pauseMenu;
+    private Text _lobbyInfoText;
 
     void Start()
     {
@@ -46,9 +46,9 @@ public class UIManager : NetworkBehaviour
         return _ipAddress;
     }
 
-    public void SetPlayerConnectedText(string text)
+    public void SetLobbyInfoText(string text)
     {
-        _playerConnectedText.text = text;
+        _lobbyInfoText.text = text;
     }
 
     public void SetGameObjectStatus(GameObject panel, bool status)
@@ -70,6 +70,11 @@ public class UIManager : NetworkBehaviour
         {
             SetGameObjectStatus(_instructionsPanel, false);
         }
+    }
+
+    public void UpdateScoreUI()
+    {
+        
     }
 
     public void QuitGame()

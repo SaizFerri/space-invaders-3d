@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Enemy : MonoBehaviour
+public class Enemy : NetworkBehaviour
 {
     private Rigidbody _rigidbody;
     private string _tag;
@@ -56,6 +57,18 @@ public class Enemy : MonoBehaviour
         // If 2 enemy ships collide destroy both
         else if (_tag == _enemyTags[1] && other.tag == _enemyTags[0])
         {
+            Destroy(this.gameObject);
+        }
+        else if (_tag == _enemyTags[1] && other.tag == "Player1Gate")
+        {
+            GameObject player2 = GameObject.FindGameObjectWithTag("Player2");
+            player2.GetComponent<Player>().hasScore = true;
+            Destroy(this.gameObject);
+        }
+        else if (_tag == _enemyTags[0] && other.tag == "Player2Gate")
+        {
+            GameObject player1 = GameObject.FindGameObjectWithTag("Player");
+            player1.GetComponent<Player>().hasScore = true;
             Destroy(this.gameObject);
         }
     }

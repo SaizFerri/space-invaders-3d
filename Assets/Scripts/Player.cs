@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
+using static UnityEngine.Networking.SyncList<int>;
 
 public class Player : NetworkBehaviour
 {
+    private UIManager _uiManager;
+    private GameManager _gameManager;
+
     [SerializeField]
     private Vector3 bounds = new Vector3(75, 25, 125);
 
@@ -26,6 +31,12 @@ public class Player : NetworkBehaviour
     [SerializeField]
     private GameObject _enemy2Prefab;
 
+    [SerializeField]
+    private GameObject _pauseMenu;
+
+    [SerializeField]
+    private GameObject _scorePanel;
+
     public GameObject playerCamera;
 
     private string _tag;
@@ -45,10 +56,11 @@ public class Player : NetworkBehaviour
     [SerializeField]
     private int _lifes = 5;
     private int _hitCount = 0;
+    
+    public int scorePlayer1 = 0;
+    public int scorePlayer2 = 0;
 
-    // Score
-    [SerializeField]
-    private int score = 0;
+    public bool hasScore = false;
 
     // Laser
     private bool _canShoot = true;
@@ -61,17 +73,20 @@ public class Player : NetworkBehaviour
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _gameManager = FindObjectOfType<GameManager>();
+        _uiManager = FindObjectOfType<UIManager>();
         _tag = gameObject.tag;
 
         if (isLocalPlayer)
         {
             playerCamera.SetActive(true);
+            _scorePanel.SetActive(true);
         }
         else
         {
             playerCamera.SetActive(false);
+            _scorePanel.SetActive(false);
         }
-        
     }
 
     void Update()
@@ -91,8 +106,20 @@ public class Player : NetworkBehaviour
                 isMoving = false;
             }
 
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                _uiManager.SetGameObjectStatus(_scorePanel, false);
+                _uiManager.SetGameObjectStatus(_pauseMenu, true);
+            }
+
             Shoot();
             SpawnSpaceShip();
+
+            if (hasScore)
+            {
+                UpdateScore();
+                hasScore = false;
+            }
         }
     }
 
@@ -101,6 +128,18 @@ public class Player : NetworkBehaviour
         if(isMoving)
         {
             Move();
+        }
+    }
+
+    public void DisconnectPlayer()
+    {
+        if (isServer)
+        {
+            _gameManager.StopHost();
+        }
+        else
+        {
+            _gameManager.StopClient();
         }
     }
 
@@ -145,13 +184,45 @@ public class Player : NetworkBehaviour
         if (_tag == "Player2")
         {
             spaceShip = Instantiate(_enemy2Prefab, transform.position + new Vector3(0, 0, -5.83f), new Quaternion(0, 180, 0, 0));
-            NetworkServer.Spawn(spaceShip);
+            NetworkServer.SpawnWithClientAuthority(spaceShip, connectionToClient);
         }
         else
         {
             spaceShip = Instantiate(_enemy1Prefab, transform.position + new Vector3(0, 0, 5.83f), Quaternion.identity);
-            NetworkServer.Spawn(spaceShip);
+            NetworkServer.SpawnWithClientAuthority(spaceShip, connectionToClient);
         }
+    }
+
+    [Command]
+    public void CmdUpdateScore()
+    {
+        if (_tag == "Player2")
+        {
+            scorePlayer2++;
+        }
+        else
+        {
+            scorePlayer1++;
+        }
+        RpcUpdateScore();
+    }
+
+    [ClientRpc]
+    public void RpcUpdateScore()
+    {
+        if (_tag == "Player2")
+        {
+            scorePlayer2++;
+        }
+        else
+        {
+            scorePlayer1++;
+        }
+    }
+
+    public void UpdateScore()
+    {
+        CmdUpdateScore();
     }
 
     void Shoot()
@@ -202,12 +273,6 @@ public class Player : NetworkBehaviour
         {
             //Destroy(this.gameObject);
         }
-    }
-
-    public void UpdateScore()
-    {
-        score++;
-        // Check for win
     }
 
     IEnumerator ShotCooldown()

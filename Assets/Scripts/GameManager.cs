@@ -26,28 +26,19 @@ public class GameManager : NetworkManager
     private void Start()
     {
         _uiManager = _uiManager.GetComponent<UIManager>();
+        DontDestroyOnLoad(this.gameObject);
     }
 
-    private void Update()
+    public void ConnectHost()
     {
-        
-    }
-
-    public void StartHost()
-    {
-        base.networkAddress = _uiManager.GetIPAddressValue();
+        base.networkAddress = _uiManager.GetIPAddressValue() != "" ? _uiManager.GetIPAddressValue() : "localhost";
         base.StartHost();
-        isPlaying = true;
-        //_uiManager.SetMenuStatus(false);
     }
 
     public void ConnectClient()
     {
-        base.networkAddress = _uiManager.GetIPAddressValue();
+        base.networkAddress = _uiManager.GetIPAddressValue() != "" ? _uiManager.GetIPAddressValue() : "localhost";
         base.StartClient();
-        isPlaying = true;
-        CmdOnPlayerConnect()
-        //_uiManager.SetMenuStatus(false);
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
@@ -64,9 +55,45 @@ public class GameManager : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, _player, playerControllerId);
     }
 
-    [Command]
-    public void CmdOnPlayerConnect()
+    public override void OnStartHost()
     {
-        _uiManager.SetPlayerConnectedText(_player.tag);
+        base.OnStartHost();
+        isPlaying = true;
+        _uiManager.SetLobbyInfoText("Hosting on: " + base.networkAddress + ":" + base.networkPort);
+        _uiManager.SetMenuStatus(false);
+    }
+
+    public override void OnStartClient(NetworkClient client)
+    {
+        base.OnStartClient(client);
+        _uiManager.SetLobbyInfoText("Connecting...");
+    }
+
+    public override void OnClientConnect(NetworkConnection conn)
+    {
+        base.OnClientConnect(conn);
+        isPlaying = true;
+        _uiManager.SetMenuStatus(false);
+        _uiManager.SetLobbyInfoText("");
+    }
+
+    public override void OnClientError(NetworkConnection conn, int errorCode)
+    {
+        base.OnClientError(conn, errorCode);
+        _uiManager.SetLobbyInfoText("ERROR: Server is full or host does not exist.");
+    }
+
+    public override void OnStopHost()
+    {
+        base.OnStopHost();
+        isPlaying = false;
+        _uiManager.SetMenuStatus(true);
+    }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        isPlaying = false;
+        _uiManager.SetMenuStatus(true);
     }
 }
