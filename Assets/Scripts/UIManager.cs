@@ -7,7 +7,13 @@ using UnityEngine.Networking;
 public class UIManager : NetworkBehaviour
 {
     [SerializeField]
+    private GameManager _gameManager;
+
+    [SerializeField]
     private GameObject _menu;
+
+    [SerializeField]
+    private GameObject _instructionsPanel;
 
     [SerializeField]
     private InputField _addressInput;
@@ -43,5 +49,31 @@ public class UIManager : NetworkBehaviour
     public void SetPlayerConnectedText(string text)
     {
         _playerConnectedText.text = text;
+    }
+
+    public void SetGameObjectStatus(GameObject panel, bool status)
+    {
+        panel.SetActive(status);
+    }
+
+    public void OpenInstructions()
+    {
+        if(!_gameManager.isPlaying)
+        {
+            SetGameObjectStatus(_instructionsPanel, true);
+        }
+    }
+
+    public void CloseInstructions()
+    {
+        if (!_gameManager.isPlaying)
+        {
+            SetGameObjectStatus(_instructionsPanel, false);
+        }
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

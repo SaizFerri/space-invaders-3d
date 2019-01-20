@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 public class GameManager : NetworkManager
 {
     private GameObject _player;
+    public bool isPlaying = false;
 
     [SerializeField]
     private UIManager _uiManager;
@@ -27,10 +28,16 @@ public class GameManager : NetworkManager
         _uiManager = _uiManager.GetComponent<UIManager>();
     }
 
+    private void Update()
+    {
+        
+    }
+
     public void StartHost()
     {
         base.networkAddress = _uiManager.GetIPAddressValue();
         base.StartHost();
+        isPlaying = true;
         //_uiManager.SetMenuStatus(false);
     }
 
@@ -38,7 +45,9 @@ public class GameManager : NetworkManager
     {
         base.networkAddress = _uiManager.GetIPAddressValue();
         base.StartClient();
-        _uiManager.SetMenuStatus(false);
+        isPlaying = true;
+        CmdOnPlayerConnect()
+        //_uiManager.SetMenuStatus(false);
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
@@ -55,13 +64,9 @@ public class GameManager : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, _player, playerControllerId);
     }
 
-    public void OnPlayerConnected()
+    [Command]
+    public void CmdOnPlayerConnect()
     {
-        _uiManager.SetPlayerConnectedText("player connected");
-    }
-
-    public void OnPlayerDisconnected()
-    {
-        _uiManager.SetPlayerConnectedText("player disconnected");
+        _uiManager.SetPlayerConnectedText(_player.tag);
     }
 }
