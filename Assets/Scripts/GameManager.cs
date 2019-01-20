@@ -55,8 +55,13 @@ public class GameManager : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, _player, playerControllerId);
     }
 
-    private void OnPlayerConnected(NetworkIdentity player)
+    public void OnPlayerConnected()
     {
-        _uiManager.SetPlayerConnectedText(player.tag);
+        _uiManager.SetPlayerConnectedText("player connected");
+    }
+
+    public void OnPlayerDisconnected()
+    {
+        _uiManager.SetPlayerConnectedText("player disconnected");
     }
 }
