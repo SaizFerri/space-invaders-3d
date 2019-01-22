@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
-using static UnityEngine.Networking.SyncList<int>;
 
 public class Player : NetworkBehaviour
 {
     private UIManager _uiManager;
     private GameManager _gameManager;
+    private PlayerScore _playerScore;
 
     [SerializeField]
     private Vector3 bounds = new Vector3(75, 25, 125);
@@ -37,6 +37,12 @@ public class Player : NetworkBehaviour
     [SerializeField]
     private GameObject _scorePanel;
 
+    [SerializeField]
+    private Text _scorePlayer1;
+
+    [SerializeField]
+    private Text _scorePlayer2;
+
     public GameObject playerCamera;
 
     private string _tag;
@@ -56,11 +62,6 @@ public class Player : NetworkBehaviour
     [SerializeField]
     private int _lifes = 5;
     private int _hitCount = 0;
-    
-    public int scorePlayer1 = 0;
-    public int scorePlayer2 = 0;
-
-    public bool hasScore = false;
 
     // Laser
     private bool _canShoot = true;
@@ -75,6 +76,7 @@ public class Player : NetworkBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _gameManager = FindObjectOfType<GameManager>();
         _uiManager = FindObjectOfType<UIManager>();
+        _playerScore = FindObjectOfType<PlayerScore>();
         _tag = gameObject.tag;
 
         if (isLocalPlayer)
@@ -114,12 +116,7 @@ public class Player : NetworkBehaviour
 
             Shoot();
             SpawnSpaceShip();
-
-            if (hasScore)
-            {
-                UpdateScore();
-                hasScore = false;
-            }
+            UpdateScoreUI();
         }
     }
 
@@ -159,6 +156,12 @@ public class Player : NetworkBehaviour
         _rigidbody.MovePosition(transform.position + (direction * _speed * Time.deltaTime));
     }
 
+    private void UpdateScoreUI()
+    {
+        _scorePlayer1.text = _playerScore.scorePlayer1.ToString();
+        _scorePlayer2.text = _playerScore.scorePlayer2.ToString();
+    }
+
     [Command]
     public void CmdSpawnLaser()
     {
@@ -191,38 +194,6 @@ public class Player : NetworkBehaviour
             spaceShip = Instantiate(_enemy1Prefab, transform.position + new Vector3(0, 0, 5.83f), Quaternion.identity);
             NetworkServer.SpawnWithClientAuthority(spaceShip, connectionToClient);
         }
-    }
-
-    [Command]
-    public void CmdUpdateScore()
-    {
-        if (_tag == "Player2")
-        {
-            scorePlayer2++;
-        }
-        else
-        {
-            scorePlayer1++;
-        }
-        RpcUpdateScore();
-    }
-
-    [ClientRpc]
-    public void RpcUpdateScore()
-    {
-        if (_tag == "Player2")
-        {
-            scorePlayer2++;
-        }
-        else
-        {
-            scorePlayer1++;
-        }
-    }
-
-    public void UpdateScore()
-    {
-        CmdUpdateScore();
     }
 
     void Shoot()

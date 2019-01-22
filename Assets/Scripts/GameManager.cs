@@ -12,6 +12,9 @@ public class GameManager : NetworkManager
     private UIManager _uiManager;
 
     [SerializeField]
+    private PlayerScore _playerScore;
+
+    [SerializeField]
     private GameObject _spawnPointPlayer1;
 
     [SerializeField]
@@ -61,12 +64,14 @@ public class GameManager : NetworkManager
         isPlaying = true;
         _uiManager.SetLobbyInfoText("Hosting on: " + base.networkAddress + ":" + base.networkPort);
         _uiManager.SetMenuStatus(false);
+        _playerScore.ResetScore();
     }
 
     public override void OnStartClient(NetworkClient client)
     {
         base.OnStartClient(client);
         _uiManager.SetLobbyInfoText("Connecting...");
+        _playerScore.ResetScore();
     }
 
     public override void OnClientConnect(NetworkConnection conn)
@@ -75,6 +80,7 @@ public class GameManager : NetworkManager
         isPlaying = true;
         _uiManager.SetMenuStatus(false);
         _uiManager.SetLobbyInfoText("");
+        _playerScore.ResetScore();
     }
 
     public override void OnClientError(NetworkConnection conn, int errorCode)

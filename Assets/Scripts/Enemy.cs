@@ -59,17 +59,5 @@ public class Enemy : NetworkBehaviour
         {
             Destroy(this.gameObject);
         }
-        else if (_tag == _enemyTags[1] && other.tag == "Player1Gate")
-        {
-            GameObject player2 = GameObject.FindGameObjectWithTag("Player2");
-            player2.GetComponent<Player>().hasScore = true;
-            Destroy(this.gameObject);
-        }
-        else if (_tag == _enemyTags[0] && other.tag == "Player2Gate")
-        {
-            GameObject player1 = GameObject.FindGameObjectWithTag("Player");
-            player1.GetComponent<Player>().hasScore = true;
-            Destroy(this.gameObject);
-        }
     }
 }

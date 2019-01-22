@@ -72,11 +72,6 @@ public class UIManager : NetworkBehaviour
         }
     }
 
-    public void UpdateScoreUI()
-    {
-        
-    }
-
     public void QuitGame()
     {
         Application.Quit();
