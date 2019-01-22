@@ -22,15 +22,17 @@ public class Gate : NetworkBehaviour
         int[] score = _scoreManager.GetScore();
 
         // If enemy ship gets through the gate update score in enemy player
-        if (_tag == _gateTags[1] && other.tag == "Player1Enemy")
+        if (_tag == _gateTags[1] && other.tag == _enemyTags[0])
         {
             int scorePlayer1 = score[0] + 1;
            _scoreManager.UpdateScore(new int[2] { scorePlayer1, score[1] });
+            Destroy(other.gameObject);
         }
-        else if (_tag == _gateTags[0] && other.tag == "Player2Enemy")
+        else if (_tag == _gateTags[0] && other.tag == _enemyTags[1])
         {
             int scorePlayer2 = score[1] + 1;
             _scoreManager.UpdateScore(new int[2] { score[0], scorePlayer2 });
+            Destroy(other.gameObject);
         }
     }
 }

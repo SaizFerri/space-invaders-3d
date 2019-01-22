@@ -6,12 +6,15 @@ using UnityEngine.Networking;
 public class Laser : NetworkBehaviour
 {
     [SerializeField]
+    private Rigidbody _rigidbody;
+
+    [SerializeField]
     private Vector3 _bounds = new Vector3(75, 25, 125);
     private string[] _playerTags = new string[2] { "Player", "Player2" };
     private string[] _laserTags = new string[2] { "Laser1", "Laser2" };
 
     [SerializeField]
-    private float _speed = 30;
+    private float _speed = 150;
 
     private string _tag;
 
@@ -20,16 +23,18 @@ public class Laser : NetworkBehaviour
         _tag = this.gameObject.tag;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (_tag == _laserTags[1])
+        _rigidbody.MovePosition(transform.position + (transform.forward * _speed * Time.deltaTime));
+
+        /*if (_tag == _laserTags[1])
         {
-            transform.position -= transform.forward * _speed * Time.deltaTime;
+            transform.position -= (transform.forward * _speed * Time.deltaTime);
         }
         else
         {
-            transform.position += transform.forward * _speed * Time.deltaTime;
-        }
+            transform.position += (transform.forward * _speed * Time.deltaTime);
+        }*/
 
         if (transform.position.z > _bounds.z || transform.position.z < -_bounds.z)
         {
@@ -37,7 +42,7 @@ public class Laser : NetworkBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    /*void OnTriggerEnter(Collider other)
     {
         // If Laser collides with player, damage player and destroy laser
         if (other.tag == _playerTags[0] && _tag == _laserTags[1])
@@ -48,6 +53,21 @@ public class Laser : NetworkBehaviour
         else if (other.tag == _playerTags[1] && _tag == _laserTags[0])
         {
             other.GetComponent<Player>().LaserDamage();
+            DestroyLaser();
+        }
+    }*/
+
+    void OnTriggerStay(Collider other)
+    {
+        // If Laser collides with player, damage player and destroy laser
+        if (other.tag == _playerTags[0] && _tag == _laserTags[1])
+        {
+            other.GetComponent<Player>().Damage();
+            DestroyLaser();
+        }
+        else if (other.tag == _playerTags[1] && _tag == _laserTags[0])
+        {
+            other.GetComponent<Player>().Damage();
             DestroyLaser();
         }
     }

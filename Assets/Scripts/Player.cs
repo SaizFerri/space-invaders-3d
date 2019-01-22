@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 
 public class Player : NetworkBehaviour
 {
+    // Global GameObjects
     private UIManager _uiManager;
     private GameManager _gameManager;
     private PlayerScore _playerScore;
@@ -13,6 +14,9 @@ public class Player : NetworkBehaviour
     [SerializeField]
     private Vector3 bounds = new Vector3(75, 25, 125);
 
+    private bool _isPlaying = false;
+
+    // Prefabs
     [SerializeField]
     private GameObject _laserPlayer1Prefab;
 
@@ -31,6 +35,7 @@ public class Player : NetworkBehaviour
     [SerializeField]
     private GameObject _enemy2Prefab;
 
+    // UI
     [SerializeField]
     private GameObject _pauseMenu;
 
@@ -43,8 +48,19 @@ public class Player : NetworkBehaviour
     [SerializeField]
     private Text _scorePlayer2;
 
+    [SerializeField]
+    private Text _winText;
+
+    [SerializeField]
+    private Text _livesText;
+
+    [SerializeField]
+    private GameObject _backButton;
+
+    // Camera
     public GameObject playerCamera;
 
+    // Tag
     private string _tag;
 
     // Movement
@@ -60,10 +76,9 @@ public class Player : NetworkBehaviour
 
     // Life
     [SerializeField]
-    private int _lifes = 5;
-    private int _hitCount = 0;
+    private int _lives = 10;
 
-    // Laser
+    // Laser and ship
     private bool _canShoot = true;
     private bool _canSpawnShip = true;
     private float _shotCooldown = 0.5f;
@@ -78,6 +93,7 @@ public class Player : NetworkBehaviour
         _uiManager = FindObjectOfType<UIManager>();
         _playerScore = FindObjectOfType<PlayerScore>();
         _tag = gameObject.tag;
+        _isPlaying = true;
 
         if (isLocalPlayer)
         {
@@ -110,13 +126,32 @@ public class Player : NetworkBehaviour
 
             if(Input.GetKeyDown(KeyCode.Escape))
             {
-                _uiManager.SetGameObjectStatus(_scorePanel, false);
-                _uiManager.SetGameObjectStatus(_pauseMenu, true);
+                OpenPausePanel(true);
             }
 
             Shoot();
             SpawnSpaceShip();
+            UpdateLives();
             UpdateScoreUI();
+            UpdateLivesUI();
+            
+            if(_playerScore.scorePlayer1 == 10 || _playerScore.scorePlayer2 == 10)
+            {
+                if(_isPlaying)
+                {
+                    SetWinOrLose();
+                    _isPlaying = false;
+                }
+            }
+
+            if(!_playerScore.isAlivePlayer1 || !_playerScore.isAlivePlayer2)
+            {
+                if(_isPlaying)
+                {
+                    SetWinOrLoseByLives();
+                    _isPlaying = false;
+                }
+            }
         }
     }
 
@@ -140,6 +175,24 @@ public class Player : NetworkBehaviour
         }
     }
 
+    public void OpenPausePanel(bool backButtonStatus)
+    {
+        if (!backButtonStatus)
+        {
+            _uiManager.SetGameObjectStatus(_backButton, backButtonStatus);
+        }
+        _uiManager.SetGameObjectStatus(_scorePanel, false);
+        _uiManager.SetGameObjectStatus(_pauseMenu, true);
+        _canShoot = false;
+    }
+
+    public void ClosePausePanel()
+    {
+        _uiManager.SetGameObjectStatus(_scorePanel, true);
+        _uiManager.SetGameObjectStatus(_pauseMenu, false);
+        _canShoot = true;
+    }
+
     void Move()
     {
         Vector3 direction;
@@ -156,10 +209,85 @@ public class Player : NetworkBehaviour
         _rigidbody.MovePosition(transform.position + (direction * _speed * Time.deltaTime));
     }
 
+    private void UpdateLives()
+    {
+        CmdUpdateLives();
+    }
+
     private void UpdateScoreUI()
     {
         _scorePlayer1.text = _playerScore.scorePlayer1.ToString();
         _scorePlayer2.text = _playerScore.scorePlayer2.ToString();
+    }
+
+    private void UpdateLivesUI()
+    {
+        _livesText.text = "Lives: " + _lives.ToString();
+    }
+
+    private void SetWinOrLose()
+    {
+        if(_tag == "Player2" && _playerScore.scorePlayer1 == 10 && _playerScore.scorePlayer2 < 10)
+        {
+            _winText.text = "YOU LOSE!";
+        }
+        else if (_tag == "Player2" && _playerScore.scorePlayer1 < 10 && _playerScore.scorePlayer2 == 10)
+        {
+            _winText.text = "YOU WIN!";
+        }
+        else if (_playerScore.scorePlayer1 == 10 && _playerScore.scorePlayer2 < 10)
+        {
+            _winText.text = "YOU WIN!";
+        }
+        else if (_playerScore.scorePlayer1 < 10 && _playerScore.scorePlayer2 == 10)
+        {
+            _winText.text = "YOU LOSE!";
+        }
+        else if (_playerScore.scorePlayer1 == 10 && _playerScore.scorePlayer2 == 10)
+        {
+            _winText.text = "TIE!";
+        }
+
+        OpenPausePanel(false);
+    }
+
+    private void SetWinOrLoseByLives()
+    {
+        if (_tag == "Player2" && !_playerScore.isAlivePlayer2 && _playerScore.isAlivePlayer1)
+        {
+            _winText.text = "YOU WERE KILLED!";
+        }
+        else if(_tag == "Player2" && _playerScore.isAlivePlayer2 && !_playerScore.isAlivePlayer1)
+        {
+            _winText.text = "YOU WIN!";
+        }
+        else if(_tag == "Player" && _playerScore.isAlivePlayer2 && !_playerScore.isAlivePlayer1)
+        {
+            _winText.text = "YOU WERE KILLED!";
+        }
+        else if(_tag == "Player" && !_playerScore.isAlivePlayer2 && _playerScore.isAlivePlayer1)
+        {
+            _winText.text = "YOU WIN!";
+        }
+
+        OpenPausePanel(false);
+    }
+
+    [Command]
+    private void CmdUpdateLives()
+    {
+        bool[] livesStatus = new bool[2] { true, true };
+
+        if(_tag == "Player2" && _lives == 0)
+        {
+            livesStatus[1] = false;
+            _playerScore.UpdateLives(livesStatus);
+        }
+        else if (_tag == "Player" && _lives == 0)
+        {
+            livesStatus[0] = false;
+            _playerScore.UpdateLives(livesStatus);
+        }
     }
 
     [Command]
@@ -169,7 +297,7 @@ public class Player : NetworkBehaviour
 
         if (_tag == "Player2")
         {
-            laser = Instantiate(_dobleLaserPlayer2Prefab, transform.position + _dobleLaserPosition2, Quaternion.identity);
+            laser = Instantiate(_dobleLaserPlayer2Prefab, transform.position + _dobleLaserPosition2, new Quaternion(0, 180, 0, 0));
             NetworkServer.Spawn(laser);
         }
         else
@@ -216,33 +344,11 @@ public class Player : NetworkBehaviour
         }
     }
 
-    public void LaserDamage()
+    public void Damage()
     {
-        if(_lifes > 0 && _hitCount == 2)
+        if (_lives > 0)
         {
-            _lifes--;
-            _hitCount = 0;
-        }
-        else if (_lifes > 0 && _hitCount != 2)
-        {
-            _hitCount++;
-        }
-        else
-        {
-            Debug.Log("");
-            //Destroy(this.gameObject);
-        }
-    }
-
-    public void EnemyDamage()
-    {
-        if (_lifes > 0)
-        {
-            _lifes--;
-        }
-        else
-        {
-            //Destroy(this.gameObject);
+            _lives--;
         }
     }
 

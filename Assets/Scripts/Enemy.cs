@@ -8,6 +8,8 @@ public class Enemy : NetworkBehaviour
     private Rigidbody _rigidbody;
     private string _tag;
     private string[] _enemyTags = new string[2] {"Player1Enemy", "Player2Enemy"};
+    private string[] _playerTags = new string[2] { "Player", "Player2" };
+    private string[] _laserTags = new string[2] { "Laser1", "Laser2" };
 
     [SerializeField]
     private float _speed = 50;
@@ -18,7 +20,7 @@ public class Enemy : NetworkBehaviour
         _tag = this.gameObject.tag;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         _rigidbody.MovePosition(transform.position + (transform.forward * _speed * Time.deltaTime));
     }
@@ -26,25 +28,25 @@ public class Enemy : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // If enemy ship collides with player, destroy ship and damage player
-        if (_tag == _enemyTags[0] && other.tag == "Player2")
+        if (_tag == _enemyTags[0] && other.tag == _playerTags[1])
         {
-            other.GetComponent<Player>().EnemyDamage();
+            other.GetComponent<Player>().Damage();
             Destroy(this.gameObject);
         }
         // If enemy ship collides with player, destroy ship and damage player
-        else if(_tag == _enemyTags[1] && other.tag == "Player")
+        else if(_tag == _enemyTags[1] && other.tag == _playerTags[0])
         {
-            other.GetComponent<Player>().EnemyDamage();
+            other.GetComponent<Player>().Damage();
             Destroy(this.gameObject);
         }
         // If enemy ship collides with enemy laser, destroy ship and laser
-        else if (_tag == _enemyTags[0] && other.tag == "Laser2")
+        else if (_tag == _enemyTags[0] && other.tag == _laserTags[1])
         {
             Destroy(other.gameObject);
             Destroy(this.gameObject);
         }
         // If enemy ship collides with enemy laser, destroy ship and laser
-        else if(_tag == _enemyTags[1] && other.tag == "Laser1")
+        else if(_tag == _enemyTags[1] && other.tag == _laserTags[0])
         {
             Destroy(other.gameObject);
             Destroy(this.gameObject);

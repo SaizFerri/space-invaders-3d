@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -64,14 +65,12 @@ public class GameManager : NetworkManager
         isPlaying = true;
         _uiManager.SetLobbyInfoText("Hosting on: " + base.networkAddress + ":" + base.networkPort);
         _uiManager.SetMenuStatus(false);
-        _playerScore.ResetScore();
     }
 
     public override void OnStartClient(NetworkClient client)
     {
         base.OnStartClient(client);
         _uiManager.SetLobbyInfoText("Connecting...");
-        _playerScore.ResetScore();
     }
 
     public override void OnClientConnect(NetworkConnection conn)
@@ -81,12 +80,26 @@ public class GameManager : NetworkManager
         _uiManager.SetMenuStatus(false);
         _uiManager.SetLobbyInfoText("");
         _playerScore.ResetScore();
+        _playerScore.ResetLives();
+    }
+
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        base.OnServerDisconnect(conn);
+        _playerScore.RpcResetScore();
+        _playerScore.RpcResetLives();
     }
 
     public override void OnClientError(NetworkConnection conn, int errorCode)
     {
         base.OnClientError(conn, errorCode);
         _uiManager.SetLobbyInfoText("ERROR: Server is full or host does not exist.");
+    }
+
+    public override void OnServerError(NetworkConnection conn, int errorCode)
+    {
+        base.OnServerError(conn, errorCode);
+        Debug.Log("Errrrrrorrrrrrrr");
     }
 
     public override void OnStopHost()

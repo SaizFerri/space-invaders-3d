@@ -5,13 +5,23 @@ using UnityEngine.Networking;
 
 public class PlayerScore : NetworkBehaviour
 {
+    [SyncVar]
     public int scorePlayer1 = 0;
+
+    [SyncVar]
     public int scorePlayer2 = 0;
+
+    [SyncVar]
+    public bool isAlivePlayer1 = true;
+
+    [SyncVar]
+    public bool isAlivePlayer2 = true;
 
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
         ResetScore();
+        ResetLives();
     }
 
     public void UpdateScore(int[] score)
@@ -19,9 +29,33 @@ public class PlayerScore : NetworkBehaviour
         CmdUpdateScore(score);
     }
 
+    public void UpdateLives(bool[] lives)
+    {
+        CmdUpdateLives(lives);
+    }
+
     public void ResetScore()
     {
         CmdResetScore();
+    }
+
+    public void ResetLives()
+    {
+        CmdResetLives();
+    }
+
+    [ClientRpc]
+    public void RpcResetScore()
+    {
+        scorePlayer1 = 0;
+        scorePlayer2 = 0;
+    }
+
+    [ClientRpc]
+    public void RpcResetLives()
+    {
+        isAlivePlayer1 = true;
+        isAlivePlayer2 = true;
     }
 
     [Command]
@@ -29,14 +63,13 @@ public class PlayerScore : NetworkBehaviour
     {
         scorePlayer1 = 0;
         scorePlayer2 = 0;
-        RpcResetScore();
     }
 
-    [ClientRpc]
-    private void RpcResetScore()
+    [Command]
+    private void CmdResetLives()
     {
-        scorePlayer1 = 0;
-        scorePlayer2 = 0;
+        isAlivePlayer1 = true;
+        isAlivePlayer2 = true;
     }
 
     [Command]
@@ -44,14 +77,13 @@ public class PlayerScore : NetworkBehaviour
     {
         scorePlayer1 = score[0];
         scorePlayer2 = score[1];
-        RpcUpdateScore(score);
     }
 
-    [ClientRpc]
-    private void RpcUpdateScore(int[] score)
+    [Command]
+    private void CmdUpdateLives(bool[] lives)
     {
-        scorePlayer1 = score[0];
-        scorePlayer2 = score[1];
+        isAlivePlayer1 = lives[0];
+        isAlivePlayer2 = lives[1];
     }
 
     public int[] GetScore()

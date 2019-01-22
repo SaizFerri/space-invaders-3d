@@ -2076,6 +2076,7 @@ RectTransform:
   - {fileID: 1859156101}
   - {fileID: 566707766}
   - {fileID: 2050037698}
+  - {fileID: 1937660175}
   m_Father: {fileID: 134150706}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2784,7 +2785,7 @@ MonoBehaviour:
   m_SpawnPrefabs:
   - {fileID: 36, guid: 518fd283cee0f70429c579b1b3256702, type: 3}
   - {fileID: 2314338084417419569, guid: d89f24e7d980d0346815c9d84dec9946, type: 3}
-  - {fileID: 3232322871138801128, guid: b44d8638df0c66e4ea54c7d7ce93dba6, type: 3}
+  - {fileID: 78, guid: b44d8638df0c66e4ea54c7d7ce93dba6, type: 3}
   - {fileID: 1086116063442159611, guid: 81fe25875e669144ca2385ed652296d0, type: 3}
   - {fileID: 1086116063442159611, guid: 765308d3a0572774fbabc3031e0c5b20, type: 3}
   - {fileID: 38, guid: 0d65089c59740cb40bd6d2b543386e34, type: 3}
@@ -3763,6 +3764,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1922577046}
   m_CullTransparentMesh: 0
+--- !u!1 &1937660174
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1937660175}
+  - component: {fileID: 1937660177}
+  - component: {fileID: 1937660176}
+  m_Layer: 9
+  m_Name: InstructionsText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1937660175
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937660174}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 803848869}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 1.2, y: -76}
+  m_SizeDelta: {x: 501.9, y: 51.5}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1937660176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937660174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 2a2d9dca38c717249bd83981aae2e13c, type: 3}
+    m_FontSize: 15
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 100
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: Try to get your helper space ships to the enemy gate, without them getting
+    destroyed. Care about the enemy lasers!
+--- !u!222 &1937660177
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937660174}
+  m_CullTransparentMesh: 0
 --- !u!1 &1942308966
 GameObject:
   m_ObjectHideFlags: 0
@@ -4244,6 +4325,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scorePlayer1: 0
   scorePlayer2: 0
+  isAlivePlayer1: 1
+  isAlivePlayer2: 1
 --- !u!4 &1993977022
 Transform:
   m_ObjectHideFlags: 0
