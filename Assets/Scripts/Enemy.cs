@@ -25,7 +25,7 @@ public class Enemy : NetworkBehaviour
         _rigidbody.MovePosition(transform.position + (transform.forward * _speed * Time.deltaTime));
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         // If enemy ship collides with player, destroy ship and damage player
         if (_tag == _enemyTags[0] && other.tag == _playerTags[1])
