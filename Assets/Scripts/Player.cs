@@ -16,6 +16,9 @@ public class Player : NetworkBehaviour
 
     private bool _isPlaying = false;
 
+    // Audio
+    private AudioSource _audioSource;
+
     // Prefabs
     [SerializeField]
     private GameObject _laserPlayer1Prefab;
@@ -92,6 +95,7 @@ public class Player : NetworkBehaviour
         _gameManager = FindObjectOfType<GameManager>();
         _uiManager = FindObjectOfType<UIManager>();
         _playerScore = FindObjectOfType<PlayerScore>();
+        _audioSource = GetComponent<AudioSource>();
         _tag = gameObject.tag;
         _isPlaying = true;
 
@@ -295,6 +299,8 @@ public class Player : NetworkBehaviour
     {
         GameObject laser;
 
+        _audioSource.Play();
+
         if (_tag == "Player2")
         {
             laser = Instantiate(_dobleLaserPlayer2Prefab, transform.position + _dobleLaserPosition2, new Quaternion(0, 180, 0, 0));
@@ -348,7 +354,7 @@ public class Player : NetworkBehaviour
     {
         if (_lives > 0)
         {
-            _lives--;
+            _lives -= 1;
         }
     }
 
