@@ -18,7 +18,7 @@ public class Laser : NetworkBehaviour
 
     private string _tag;
 
-    void Awake()
+    void Start()
     {
         _tag = this.gameObject.tag;
     }
@@ -26,15 +26,6 @@ public class Laser : NetworkBehaviour
     void FixedUpdate()
     {
         _rigidbody.MovePosition(transform.position + (transform.forward * _speed * Time.deltaTime));
-
-        /*if (_tag == _laserTags[1])
-        {
-            transform.position -= (transform.forward * _speed * Time.deltaTime);
-        }
-        else
-        {
-            transform.position += (transform.forward * _speed * Time.deltaTime);
-        }*/
 
         if (transform.position.z > _bounds.z || transform.position.z < -_bounds.z)
         {
@@ -57,6 +48,7 @@ public class Laser : NetworkBehaviour
         }
     }*/
 
+    // If the laser is fast or the connection too bad, OnTriggerStay is better to detect the collision
     void OnTriggerStay(Collider other)
     {
         // If Laser collides with player, damage player and destroy laser
@@ -74,6 +66,7 @@ public class Laser : NetworkBehaviour
 
     void DestroyLaser()
     {
+        // Destroy dobleLaser GameObject
         if (this.gameObject.transform.parent)
         {
             Destroy(this.gameObject.transform.parent.gameObject);

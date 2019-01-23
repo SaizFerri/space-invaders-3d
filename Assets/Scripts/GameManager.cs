@@ -99,7 +99,6 @@ public class GameManager : NetworkManager
     public override void OnServerError(NetworkConnection conn, int errorCode)
     {
         base.OnServerError(conn, errorCode);
-        Debug.Log("Errrrrrorrrrrrrr");
     }
 
     public override void OnStopHost()
