@@ -203,8 +203,7 @@ MonoBehaviour:
   _dobleLaserPlayer2Prefab: {fileID: 78, guid: b44d8638df0c66e4ea54c7d7ce93dba6, type: 3}
   _enemy1Prefab: {fileID: 2225135348515789858, guid: 39f85ab7305d6c84f99541cd001aae19,
     type: 3}
-  _enemy2Prefab: {fileID: 4012840175669405067, guid: 4ca61f65cd59b544f9becd7d4ebdc0df,
-    type: 3}
+  _enemy2Prefab: {fileID: 85, guid: 4ca61f65cd59b544f9becd7d4ebdc0df, type: 3}
   _pauseMenu: {fileID: 47}
   _scorePanel: {fileID: 57}
   _scorePlayer1: {fileID: 256}

@@ -17,6 +17,12 @@ public class PlayerScore : NetworkBehaviour
     [SyncVar]
     public bool isAlivePlayer2 = true;
 
+    [SyncVar]
+    public int livesPlayer1 = 10;
+
+    [SyncVar]
+    public int livesPlayer2 = 10;
+
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -29,9 +35,9 @@ public class PlayerScore : NetworkBehaviour
         CmdUpdateScore(score);
     }
 
-    public void UpdateLives(bool[] lives)
+    public void UpdateLives(int livesPlayer1, int livesPlayer2)
     {
-        CmdUpdateLives(lives);
+        CmdUpdateLives(livesPlayer1, livesPlayer2);
     }
 
     public void ResetScore()
@@ -56,6 +62,8 @@ public class PlayerScore : NetworkBehaviour
     {
         isAlivePlayer1 = true;
         isAlivePlayer2 = true;
+        livesPlayer1 = 10;
+        livesPlayer2 = 10;
     }
 
     [Command]
@@ -70,6 +78,8 @@ public class PlayerScore : NetworkBehaviour
     {
         isAlivePlayer1 = true;
         isAlivePlayer2 = true;
+        livesPlayer1 = 10;
+        livesPlayer2 = 10;
     }
 
     [Command]
@@ -80,10 +90,19 @@ public class PlayerScore : NetworkBehaviour
     }
 
     [Command]
-    private void CmdUpdateLives(bool[] lives)
+    private void CmdUpdateLives(int livesPlayer1, int livesPlayer2)
     {
-        isAlivePlayer1 = lives[0];
-        isAlivePlayer2 = lives[1];
+        this.livesPlayer1 = livesPlayer1;
+        this.livesPlayer2 = livesPlayer2;
+
+        if (this.livesPlayer1 == 0)
+        {
+            this.isAlivePlayer1 = false;
+        }
+        else if (this.livesPlayer2 == 0)
+        {
+            this.isAlivePlayer2 = false;
+        }
     }
 
     public int[] GetScore()

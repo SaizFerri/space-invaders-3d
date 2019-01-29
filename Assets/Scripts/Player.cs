@@ -77,10 +77,6 @@ public class Player : NetworkBehaviour
     private float _moveY;
     private float _moveZ;
 
-    // Life
-    [SerializeField]
-    private int _lives = 10;
-
     // Laser and ship
     private bool _canShoot = true;
     private bool _canSpawnShip = true;
@@ -135,7 +131,6 @@ public class Player : NetworkBehaviour
 
             Shoot();
             SpawnSpaceShip();
-            UpdateLives();
             UpdateScoreUI();
             UpdateLivesUI();
             
@@ -213,11 +208,6 @@ public class Player : NetworkBehaviour
         _rigidbody.MovePosition(transform.position + (direction * _speed * Time.deltaTime));
     }
 
-    private void UpdateLives()
-    {
-        CmdUpdateLives();
-    }
-
     private void UpdateScoreUI()
     {
         _scorePlayer1.text = _playerScore.scorePlayer1.ToString();
@@ -226,7 +216,14 @@ public class Player : NetworkBehaviour
 
     private void UpdateLivesUI()
     {
-        _livesText.text = "Lives: " + _lives.ToString();
+        if (_tag == "Player2")
+        {
+            _livesText.text = "Lives: " + _playerScore.livesPlayer2.ToString();
+        }
+        else
+        {
+            _livesText.text = "Lives: " + _playerScore.livesPlayer1.ToString();
+        }
     }
 
     private void SetWinOrLose()
@@ -275,23 +272,6 @@ public class Player : NetworkBehaviour
         }
 
         OpenPausePanel(false);
-    }
-
-    [Command]
-    private void CmdUpdateLives()
-    {
-        bool[] livesStatus = new bool[2] { true, true };
-
-        if(_tag == "Player2" && _lives == 0)
-        {
-            livesStatus[1] = false;
-            _playerScore.UpdateLives(livesStatus);
-        }
-        else if (_tag == "Player" && _lives == 0)
-        {
-            livesStatus[0] = false;
-            _playerScore.UpdateLives(livesStatus);
-        }
     }
 
     [Command]
@@ -349,12 +329,19 @@ public class Player : NetworkBehaviour
             StartCoroutine(ShipSpawnCooldown());
         }
     }
-
+    
     public void Damage()
     {
-        if (_lives > 0)
+        if (_playerScore.livesPlayer1 > 0 && _playerScore.livesPlayer2 > 0)
         {
-            _lives -= 1;
+            if (_tag == "Player2")
+            {
+                _playerScore.UpdateLives(_playerScore.livesPlayer1, _playerScore.livesPlayer2 - 1);
+            }
+            else
+            {
+                _playerScore.UpdateLives(_playerScore.livesPlayer1 - 1, _playerScore.livesPlayer2);
+            }
         }
     }
 
